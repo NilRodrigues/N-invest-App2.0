@@ -1,8 +1,29 @@
-// investimentos.js - Arquivo completo (APIs atuais 2025)
+// investimentos.js - Arquivo completo (APIs atuais 2025) COM AUTENTICAÇÃO
 
 // =========================
 // Configuração
 // =========================
+
+// Importações do Firebase
+import { auth } from "./firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+// Verifica autenticação ANTES de carregar a página
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    // Não está logado - redireciona para login
+    console.log("Usuário não autenticado. Redirecionando para login...");
+    window.location.href = "login.html";
+    return;
+  }
+  
+  // Usuário logado - pode continuar carregando a página
+  console.log("Usuário autenticado:", user.email);
+  
+  // Inicia o app após verificar autenticação
+  initApp();
+});
+
 let investments = [];
 let marketData = { selic: 0, ipca: 0, ipca12m: 0 };
 let investmentValues = {};
@@ -277,27 +298,31 @@ async function fetchMarketData() {
 // Ações (B3) via brapi.dev (recomendado)
 // Observação: sem token, alguns ativos podem falhar/limitar.
 async function getStockPrice(symbol) {
-  try {
-    if (!symbol) return null;
+  if (!symbol) return null;
 
-    // NU é listado na NYSE, brapi pode não ter. Nesse caso tentamos fallback no Yahoo.
-    // Para B3: "ITUB4", "PETR4", etc.
+  try {
+    // NU é listada fora da B3
     if (symbol === "NU") {
       return await getYahooPrice("NU");
     }
 
     const tokenParam = BRAPI_TOKEN ? `&token=${encodeURIComponent(BRAPI_TOKEN)}` : "";
     const url = `https://brapi.dev/api/quote/${encodeURIComponent(symbol)}?range=1d&interval=1d${tokenParam}`;
+
     const data = await fetchJson(url, { timeoutMs: 20000 });
 
     const result = data?.results?.[0];
     const price = result?.regularMarketPrice;
 
-    if (typeof price === "number" && Number.isFinite(price)) return price;
-    return null;
+    if (typeof price === "number" && Number.isFinite(price)) {
+      return price;
+    }
+
+    throw new Error("Preço inválido");
+
   } catch (error) {
-    console.error("Erro ao buscar cotação (brapi):", error);
-    return null;
+    console.warn(`⚠️ brapi falhou para ${symbol}. Tentando Yahoo...`, error);
+    return await getYahooPrice(symbol);
   }
 }
 
@@ -396,30 +421,37 @@ async function calculateCurrentValue(investment) {
 // =========================
 // Event handlers
 // =========================
-document.getElementById("invType")?.addEventListener("change", function (e) {
+function setupEventHandlers() {
+  const invType = document.getElementById("invType");
   const optionSelect = document.getElementById("invOption");
-  const type = e.target.value;
+  
+  invType?.addEventListener("change", function (e) {
+    const type = e.target.value;
 
-  if (!optionSelect) return;
+    if (!optionSelect) return;
 
-  if (!type) {
-    optionSelect.classList.add("hidden");
-    return;
-  }
+    if (!type) {
+      optionSelect.classList.add("hidden");
+      return;
+    }
 
-  optionSelect.innerHTML = '<option value="">Selecione o investimento</option>';
-  investmentOptions[type].forEach((opt, idx) => {
-    const option = document.createElement("option");
-    option.value = String(idx);
-    option.textContent = opt.name;
-    optionSelect.appendChild(option);
+    optionSelect.innerHTML = '<option value="">Selecione o investimento</option>';
+    investmentOptions[type].forEach((opt, idx) => {
+      const option = document.createElement("option");
+      option.value = String(idx);
+      option.textContent = opt.name;
+      optionSelect.appendChild(option);
+    });
+
+    optionSelect.classList.remove("hidden");
   });
 
-  optionSelect.classList.remove("hidden");
-});
-
-document.getElementById("invValue")?.addEventListener("input", handleValueChange);
-document.getElementById("submitBtn")?.addEventListener("click", addInvestment);
+  const invValue = document.getElementById("invValue");
+  invValue?.addEventListener("input", handleValueChange);
+  
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn?.addEventListener("click", addInvestment);
+}
 
 // =========================
 // CRUD
@@ -468,7 +500,9 @@ async function addInvestment() {
         ? await getStockPrice(selected.symbol)
         : await getCryptoPrice(selected.symbol);
 
-      if (!currentPrice) throw new Error("Não foi possível obter a cotação (tente novamente)");
+     if (!currentPrice) {
+  throw new Error(`Não foi possível obter cotação para ${selected.name}`);
+}
 
       investment.quantity = value / currentPrice;
       investment.avgPrice = currentPrice;
@@ -690,10 +724,13 @@ async function renderTopPerformers() {
   container.innerHTML = html;
 }
 
-document.getElementById("periodFilter")?.addEventListener("change", function (e) {
-  periodFilter = e.target.value;
-  renderTopPerformers();
-});
+function setupTopPerformersFilter() {
+  const periodFilterEl = document.getElementById("periodFilter");
+  periodFilterEl?.addEventListener("change", function (e) {
+    periodFilter = e.target.value;
+    renderTopPerformers();
+  });
+}
 
 // =========================
 // Dados de mercado em tempo real (simulado)
@@ -735,8 +772,6 @@ async function fetchMarketGainers() {
   }
 }
 
-
-
 async function fetchMarketLosers() {
   const container = document.getElementById('marketLosersList');
 
@@ -774,12 +809,14 @@ async function fetchMarketLosers() {
   }
 }
 
-
 // =========================
 // Inicialização
 // =========================
-async function init() {
+async function initApp() {
   loadInvestments();
+  setupEventHandlers();
+  setupTopPerformersFilter();
+  
   await fetchMarketData();
   await fetchMarketGainers();
   await fetchMarketLosers();
@@ -794,5 +831,7 @@ async function init() {
   }
 }
 
-// Iniciar aplicação
-init();
+// O initApp será chamado automaticamente após verificar autenticação
+// na função onAuthStateChanged no início do arquivo
+
+window.deleteInvestment = deleteInvestment;

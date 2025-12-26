@@ -239,7 +239,10 @@ googleSignupBtn?.addEventListener("click", async () => {
 
   try {
     await signInWithPopup(auth, provider);
-    window.location.href = "app.html";
+    
+    // Redireciona para o app após cadastro com Google
+    window.location.href = "index.html";
+    
   } catch (error) {
     // Se usuário cancelar, não mostra erro
     if (

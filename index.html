@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>N-Invest • Controle Financeiro</title>
 
   <link rel="stylesheet" href="styles.css">
@@ -10,6 +10,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <!-- Loader enquanto verifica autenticação -->
+  <div id="loadingScreen" style="position: fixed; inset: 0; background: #0f172a; display: flex; align-items: center; justify-content: center; z-index: 10000;">
+    <div style="text-align: center;">
+      <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; margin: 0 auto 16px; animation: float 6s infinite ease-in-out; box-shadow: 0 0 16px rgba(99, 102, 241, 0.3);">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <p style="color: #94a3b8; font-family: 'Inter', sans-serif; font-size: 13px;">Verificando autenticação...</p>
+    </div>
+  </div>
 
   <!-- Fundo animado -->
   <div class="background-animated">
@@ -22,12 +32,12 @@
     <div class="gradient-overlay"></div>
   </div>
 
-  <div class="page">
+  <div class="page" id="appRoot">
 
     <!-- HEADER -->
     <header class="header">
 
-      <!-- BOTÃO INVESTIMENTOS (SOMENTE ELE CLICÁVEL) -->
+      <!-- BOTÃO INVESTIMENTOS -->
       <a href="investimentos.html" class="btn-invest" id="investBtn" aria-label="Abrir investimentos">
         <i class="fas fa-coins" aria-hidden="true"></i>
         Investimentos
@@ -58,7 +68,7 @@
       </div>
     </header>
 
-        <!-- CONTROLES -->
+    <!-- CONTROLES -->
     <section class="controls card">
       <form id="txForm" class="form" novalidate>
         <input type="hidden" id="type" value="income">
@@ -67,10 +77,10 @@
           <h2><i class="fas fa-plus-circle"></i> Nova Transação</h2>
         </div>
 
-       
-
+        <!-- LINHA DE INPUTS COM BOTÕES CORRIGIDOS -->
         <div class="controls-row controls-row--inputs">
-
+          
+          <!-- VALOR -->
           <div class="input-group">
             <label for="amount" class="input-label">Valor</label>
             <div class="input-wrapper">
@@ -79,17 +89,19 @@
             </div>
           </div>
 
-           <div class="controls-row">
-          <div class="segmented">
-            <button type="button" class="seg-btn is-active" data-type="income">
-              <i class="fas fa-arrow-up"></i> Entrada
-            </button>
-            <button type="button" class="seg-btn" data-type="expense">
-              <i class="fas fa-arrow-down"></i> Despesa
-            </button>
+          <!-- BOTÕES ENTRADA/DESPESA (AGORA FIXOS) -->
+          <div class="segmented-container">
+            <div class="segmented">
+              <button type="button" class="seg-btn is-active" data-type="income">
+                <i class="fas fa-arrow-up"></i> Entrada
+              </button>
+              <button type="button" class="seg-btn" data-type="expense">
+                <i class="fas fa-arrow-down"></i> Despesa
+              </button>
+            </div>
           </div>
-        </div>
 
+          <!-- CATEGORIA -->
           <div class="input-group">
             <label for="category" class="input-label">Categoria</label>
             <select id="category" required>
@@ -113,12 +125,14 @@
             </select>
           </div>
 
+          <!-- DATA -->
           <div class="input-group">
             <label for="date" class="input-label">Data</label>
             <input id="date" type="date" required>
           </div>
         </div>
 
+        <!-- DESCRIÇÃO -->
         <div class="controls-row">
           <div class="input-group input-group--full">
             <label for="note" class="input-label">Descrição</label>
@@ -126,6 +140,7 @@
           </div>
         </div>
 
+        <!-- BOTÕES DO FORMULÁRIO -->
         <div class="form-actions">
           <button class="btn-primary" type="submit">
             <i class="fas fa-plus"></i> Adicionar
@@ -138,43 +153,39 @@
         <p id="formError" class="error"></p>
       </form>
 
+      <!-- RESUMO -->
+      <section class="bar-wrap">
+        <div class="stats-cards">
+          <div class="stat-card stat-card--income">
+            <div class="stat-icon"><i class="fas fa-arrow-up"></i></div>
+            <div class="stat-content">
+              <span class="stat-label">Entradas</span>
+              <span class="stat-value" id="labelIncome">R$ 0,00</span>
+            </div>
+          </div>
 
-    <!-- RESUMO -->
-    <section class="bar-wrap">
-      <div class="stats-cards">
+          <div class="stat-card stat-card--expense">
+            <div class="stat-icon"><i class="fas fa-arrow-down"></i></div>
+            <div class="stat-content">
+              <span class="stat-label">Saídas</span>
+              <span class="stat-value" id="labelExpense">R$ 0,00</span>
+            </div>
+          </div>
 
-        <div class="stat-card stat-card--income">
-          <div class="stat-icon"><i class="fas fa-arrow-up"></i></div>
-          <div class="stat-content">
-            <span class="stat-label">Entradas</span>
-            <span class="stat-value" id="labelIncome">R$ 0,00</span>
+          <div class="stat-card stat-card--balance">
+            <div class="stat-icon"><i class="fas fa-balance-scale"></i></div>
+            <div class="stat-content">
+              <span class="stat-label">Saldo</span>
+              <span class="stat-value" id="labelBalance">R$ 0,00</span>
+            </div>
           </div>
         </div>
 
-        <div class="stat-card stat-card--expense">
-          <div class="stat-icon"><i class="fas fa-arrow-down"></i></div>
-          <div class="stat-content">
-            <span class="stat-label">Saídas</span>
-            <span class="stat-value" id="labelExpense">R$ 0,00</span>
-          </div>
+        <div class="cashbar">
+          <div class="cashbar-income" id="barIncome"></div>
+          <div class="cashbar-expense" id="barExpense"></div>
         </div>
-
-        <div class="stat-card stat-card--balance">
-          <div class="stat-icon"><i class="fas fa-balance-scale"></i></div>
-          <div class="stat-content">
-            <span class="stat-label">Saldo</span>
-            <span class="stat-value" id="labelBalance">R$ 0,00</span>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="cashbar">
-        <div class="cashbar-income" id="barIncome"></div>
-        <div class="cashbar-expense" id="barExpense"></div>
-      </div>
-    </section>
-
+      </section>
 
       <!-- FILTROS -->
       <div class="filters">
@@ -229,39 +240,42 @@
       </div>
     </section>
 
-    <!-- HISTÓRICO -->
-    <section class="table-card">
-      <div class="table-head">
-        <h2><i class="fas fa-history"></i> Histórico de Lançamentos</h2>
-        <div class="table-actions">
-          <button class="btn-icon" id="exportBtn"><i class="fas fa-download"></i></button>
-          <button class="btn-icon" id="printBtn"><i class="fas fa-print"></i></button>
-        </div>
-      </div>
+<!-- HISTÓRICO -->
+<section class="table-card">
+  <div class="table-head">
+    <h2><i class="fas fa-history"></i> Histórico de Lançamentos</h2>
+    <div class="table-actions">
+      <button class="btn-icon" id="exportBtn"><i class="fas fa-download"></i></button>
+      <button class="btn-icon" id="printBtn"><i class="fas fa-print"></i></button>
+    </div>
+  </div>
 
-      <div class="table-wrap">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Tipo</th>
-              <th>Categoria</th>
-              <th>Descrição</th>
-              <th class="right">Valor</th>
-              <th class="right">Ações</th>
-            </tr>
-          </thead>
-          <tbody id="txBody"></tbody>
-        </table>
+  <div class="table-wrap">
+    <!-- TABELA DESKTOP -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Tipo</th>
+          <th>Categoria</th>
+          <th>Descrição</th>
+          <th class="right">Valor</th>
+          <th class="right">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="txBody"></tbody>
+    </table>
 
-        <div class="empty-state" id="emptyState">
-          <i class="fas fa-receipt"></i>
-          <p>Nenhuma transação encontrada</p>
-          <span>Adicione sua primeira transação</span>
-        </div>
-      </div>
-    </section>
+    <!-- CARDS MOBILE (aparece apenas em telas menores) -->
+    <div class="mobile-transactions" id="mobileTransactions"></div>
 
+    <div class="empty-state" id="emptyState">
+      <i class="fas fa-receipt"></i>
+      <p>Nenhuma transação encontrada</p>
+      <span>Adicione sua primeira transação</span>
+    </div>
+  </div>
+</section>
     <!-- COFRINHOS -->
     <section class="goals-section card">
       <div class="form-header">
@@ -270,7 +284,6 @@
 
       <form id="goalForm" class="goals-form" novalidate>
         <div class="goal-form-grid">
-
           <div class="input-group goal-input-full">
             <label for="goalName">Nome da meta</label>
             <input id="goalName" required>
@@ -305,7 +318,6 @@
               <option value="monthly">Mensal</option>
             </select>
           </div>
-
         </div>
 
         <div class="form-actions">
@@ -330,7 +342,7 @@
     </section>
 
   </div>
-  "
+
   <script type="module" src="index.js"></script>
   
 </body>

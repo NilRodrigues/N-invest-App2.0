@@ -148,7 +148,7 @@ function computePlan(goal) {
 }
 
 /* ================== AUTH/UI ELEMENTS ================== */
-const authScreen = $("#authScreen");
+const loadingScreen = $("#loadingScreen");
 const appRoot = $("#appRoot");
 
 // Header / user
@@ -447,6 +447,8 @@ function render() {
     emptyState.style.display = "flex";
   } else {
     emptyState.style.display = "none";
+    
+    // Renderização para desktop (tabela)
     txBody.innerHTML = list
       .map((x) => {
         const isIncome = x.type === "income";
@@ -477,6 +479,47 @@ function render() {
         `;
       })
       .join("");
+    
+    // Renderização para mobile (cards)
+    const mobileContainer = document.querySelector('.mobile-transactions');
+    if (mobileContainer) {
+      mobileContainer.innerHTML = list
+        .map((x) => {
+          const isIncome = x.type === "income";
+          const badge = isIncome ? "income" : "expense";
+          const typeLabel = isIncome ? "Entrada" : "Saída";
+          const sign = isIncome ? "+" : "-";
+          const icon = isIncome ? "fa-arrow-up" : "fa-arrow-down";
+
+          return `
+            <div class="transaction-card">
+              <div class="transaction-header">
+                <span class="transaction-date">${formatDate(x.date)}</span>
+                <span class="badge ${badge}">
+                  <i class="fas ${icon}"></i> ${typeLabel}
+                </span>
+              </div>
+              
+              <div class="transaction-category">${escapeHtml(x.category)}</div>
+              
+              <div class="transaction-description">
+                ${escapeHtml(x.note ?? "Sem descrição")}
+              </div>
+              
+              <div class="transaction-value ${badge}">
+                ${sign} ${fmtBRL(x.amountCents)}
+              </div>
+              
+              <div class="transaction-actions">
+                <button class="row-btn" data-action="delete" data-id="${x.id}">
+                  <i class="fas fa-trash"></i> Excluir
+                </button>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
   }
 
   renderGoals();
@@ -768,22 +811,23 @@ function startSync(uid) {
 
 /* ================== AUTH STATE ================== */
 onAuthStateChanged(auth, (user) => {
+  // Esconde o loader
+  if (loadingScreen) {
+    loadingScreen.style.display = "none";
+  }
+  
   if (!user) {
-    userId = null;
-    currentUser = null;
-    txs = [];
-    goals = [];
-    stopSync();
-
-    if (authScreen) authScreen.style.display = "flex";
-    if (appRoot) appRoot.hidden = true;
-
+    // Usuário NÃO está logado - REDIRECIONA PARA LOGIN
+    console.log("Usuário não autenticado. Redirecionando para login...");
+    window.location.href = "login.html";
     return;
   }
 
+  // Usuário ESTÁ logado - CONTINUA NO APP
   userId = user.uid;
   currentUser = user;
 
+  // Atualiza informações do usuário no header
   if (userNameEl) {
     const displayName = user.displayName || user.email?.split("@")[0] || "Usuário";
     userNameEl.textContent = displayName;
@@ -798,18 +842,18 @@ onAuthStateChanged(auth, (user) => {
     userAvatarEl.textContent = displayName.charAt(0).toUpperCase();
   }
 
-  if (authScreen) authScreen.style.display = "none";
-  if (appRoot) appRoot.hidden = false;
-
+  // Configura tipo inicial e inputs
   setType("income");
   initInputsAndDates();
 
+  // Inicia sincronização dos dados
   startSync(userId);
 });
 
 logoutBtn?.addEventListener("click", async () => {
   try {
     await signOut(auth);
+    // Após logout, o onAuthStateChanged irá lidar com o redirecionamento
   } catch (err) {
     console.error("Logout error:", err);
     alert("Erro ao sair. Tente novamente.");

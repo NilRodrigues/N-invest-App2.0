@@ -158,8 +158,8 @@ loginForm?.addEventListener("submit", async (e) => {
       return;
     }
     
-    // Se estiver verificado, redireciona para o app
-    window.location.href = "app.html";
+    // Se estiver verificado, redireciona para o app (index.html)
+    window.location.href = "index.html";
     
   } catch (error) {
     showError(handleFirebaseError(error));
@@ -182,8 +182,8 @@ googleLoginBtn?.addEventListener("click", async () => {
   try {
     await signInWithPopup(auth, provider);
     
-    // Redireciona para o app
-    window.location.href = "app.html";
+    // Redireciona para o app (index.html)
+    window.location.href = "index.html";
     
   } catch (error) {
     // Se usuário cancelar, não mostra erro
