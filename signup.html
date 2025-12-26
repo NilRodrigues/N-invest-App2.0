@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N-Invest • Criar Conta</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Fundo animado -->
+  <div class="background-animated">
+    <div class="particles-container">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+    <div class="gradient-overlay"></div>
+  </div>
+
+  <!-- Tela de Cadastro -->
+  <section class="auth-screen">
+    <div class="auth-container">
+      <!-- Card esquerdo - Branding -->
+      <div class="auth-branding">
+        <div class="brand-logo">
+          <div class="logo-icon-animated">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h1 class="brand-title">
+            <span class="brand-highlight">N</span>-Invest
+          </h1>
+        </div>
+        
+        <div class="brand-subtitle">
+          <h2>Crie sua conta</h2>
+          <p>Comece a gerenciar suas finanças de forma inteligente hoje mesmo</p>
+        </div>
+        
+        <div class="features-list">
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-rocket"></i>
+            </div>
+            <div class="feature-text">
+              <h4>Começar é Fácil</h4>
+              <p>Cadastro rápido em menos de 1 minuto</p>
+            </div>
+          </div>
+          
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-lock"></i>
+            </div>
+            <div class="feature-text">
+              <h4>100% Seguro</h4>
+              <p>Seus dados protegidos com tecnologia Google</p>
+            </div>
+          </div>
+          
+          <div class="feature">
+            <div class="feature-icon">
+              <i class="fas fa-gift"></i>
+            </div>
+            <div class="feature-text">
+              <h4>Totalmente Gratuito</h4>
+              <p>Sem taxas ocultas ou cobranças surpresa</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card direito - Formulário -->
+      <div class="auth-card">
+        <div class="auth-header">
+          <h2 class="auth-title">Criar conta</h2>
+          <p class="auth-subtitle">Preencha os dados para começar</p>
+        </div>
+
+        <form class="auth-form" id="signupForm">
+          <div class="input-group">
+            <label for="email" class="input-label">
+              <i class="fas fa-envelope"></i>
+              E-mail
+            </label>
+            <input
+              id="email"
+              type="email"
+              autocomplete="email"
+              required
+              placeholder="seu@email.com"
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="password" class="input-label">
+              <i class="fas fa-lock"></i>
+              Senha
+            </label>
+            <div class="password-field">
+              <input
+                id="password"
+                type="password"
+                autocomplete="new-password"
+                required
+                minlength="6"
+                placeholder="Mínimo 6 caracteres"
+              />
+              <button class="toggle-password" type="button" id="togglePassword">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="confirmPassword" class="input-label">
+              <i class="fas fa-lock"></i>
+              Confirmar Senha
+            </label>
+            <div class="password-field">
+              <input
+                id="confirmPassword"
+                type="password"
+                autocomplete="new-password"
+                required
+                minlength="6"
+                placeholder="Digite a senha novamente"
+              />
+              <button class="toggle-password" type="button" id="toggleConfirmPassword">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button class="btn-auth-submit" type="submit">
+            <span class="btn-text">Criar conta</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+
+          <div class="auth-divider">
+            <span>ou</span>
+          </div>
+
+          <button class="btn-google-auth" type="button" id="googleSignup">
+            <i class="fab fa-google"></i>
+            <span>Cadastrar com Google</span>
+          </button>
+
+          <a href="login.html" class="btn-auth-toggle">
+            Já tem uma conta? <strong>Entrar</strong>
+          </a>
+        </form>
+
+        <div class="error-message" id="errorMessage"></div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="signup.js"></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N-Invest • Investimentos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="investimentos.css">
+</head>
+<body class="min-h-screen bg-black text-white relative overflow-x-hidden overflow-y-auto">
+
+  <!-- Background animado -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 80px; height: 80px; left: 10%; top: 20%; animation-delay: 0s; animation-duration: 12s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 60px; height: 60px; left: 80%; top: 80%; animation-delay: 2s; animation-duration: 15s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 100px; height: 100px; left: 50%; top: 50%; animation-delay: 4s; animation-duration: 18s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 70px; height: 70px; left: 20%; top: 70%; animation-delay: 1s; animation-duration: 14s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 90px; height: 90px; left: 70%; top: 30%; animation-delay: 3s; animation-duration: 16s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 50px; height: 50px; left: 30%; top: 10%; animation-delay: 5s; animation-duration: 13s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 85px; height: 85px; left: 60%; top: 60%; animation-delay: 2.5s; animation-duration: 17s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 65px; height: 65px; left: 15%; top: 45%; animation-delay: 4.5s; animation-duration: 14.5s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 75px; height: 75px; left: 85%; top: 15%; animation-delay: 1.5s; animation-duration: 15.5s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 95px; height: 95px; left: 40%; top: 85%; animation-delay: 3.5s; animation-duration: 16.5s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 55px; height: 55px; left: 5%; top: 55%; animation-delay: 6s; animation-duration: 19s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 110px; height: 110px; left: 90%; top: 40%; animation-delay: 2.8s; animation-duration: 20s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 45px; height: 45px; left: 25%; top: 90%; animation-delay: 4.2s; animation-duration: 11s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 88px; height: 88px; left: 55%; top: 5%; animation-delay: 5.5s; animation-duration: 13.5s;"></div>
+    <div class="absolute rounded-full bg-purple-500 opacity-20 animate-pulse" style="width: 72px; height: 72px; left: 75%; top: 75%; animation-delay: 1.8s; animation-duration: 18.5s;"></div>
+  </div>
+
+
+
+  <div class="relative z-10 max-w-7xl mx-auto p-4 sm:p-6">
+    <!-- Header -->
+    <div class="bg-gray-900 rounded-2xl p-6 mb-6 border border-gray-800 relative">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <!-- Botão de voltar -->
+          <a href="index.html" class="back-btn">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+          </a>
+          
+          <svg class="w-10 h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          
+          <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+            N-Invest
+          </h1>
+        </div>
+        <div class="text-sm text-gray-400">
+          <div id="selicRate">Selic: --</div>
+          <div id="ipcaRate">IPCA: --</div>
+        </div>
+      </div>
+    </div>
+
+    
+
+    <!-- Alert -->
+    <div id="alertContainer" class="mb-6"></div>
+
+    <!-- Summary Cards -->
+    <div id="summaryCards" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 hidden"></div>
+
+    <!-- Form -->
+    <div class="bg-gray-900 rounded-2xl p-6 mb-6 border border-gray-800">
+      <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+        <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        Novo Investimento
+      </h2>
+      
+      <div class="space-y-4">
+        <select id="invType" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none">
+          <option value="">Selecione o tipo</option>
+          <option value="fixed_selic">Renda Fixa - Selic/CDI</option>
+          <option value="fixed_ipca">Tesouro IPCA+</option>
+          <option value="stock">Renda Variável (Ações)</option>
+          <option value="crypto">Criptomoeda</option>
+        </select>
+
+        <select id="invOption" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none hidden">
+          <option value="">Selecione o investimento</option>
+        </select>
+
+        <input id="invValue" type="text" placeholder="Valor investido (R$)" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none">
+
+        <input id="invDate" type="date" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white focus:border-purple-500 focus:outline-none">
+
+        <button id="submitBtn" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-105">
+          Adicionar Investimento
+        </button>
+      </div>
+    </div>
+
+    <!-- Investments List -->
+    <div class="bg-gray-900 rounded-2xl p-6 border border-gray-800 mb-6">
+      <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+        <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+        </svg>
+        Minha Carteira
+      </h2>
+      <div id="investmentList">
+        <div class="text-center py-12 text-gray-500">
+          Nenhum investimento cadastrado ainda
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Performers Chart -->
+    <div id="topPerformersContainer" class="bg-gray-900 rounded-2xl p-6 border border-gray-800 mb-6 hidden">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold flex items-center gap-2">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          Top 10 Ativos com Melhor Performance
+        </h2>
+        <select id="periodFilter" class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm text-white focus:border-purple-500 focus:outline-none">
+          <option value="week">Última Semana</option>
+          <option value="month" selected>Último Mês</option>
+          <option value="quarter">Último Trimestre</option>
+          <option value="year">Último Ano</option>
+          <option value="all">Todo Período</option>
+        </select>
+      </div>
+      <div id="topPerformersList"></div>
+    </div>
+
+    <!-- Market Trends - Top Gainers -->
+    <div class="bg-gray-900 rounded-2xl p-6 border border-gray-800 mb-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold flex items-center gap-2">
+          <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          </svg>
+          Top 10 Maiores Altas do Mercado
+        </h2>
+        <div class="text-sm text-gray-400">Dados em tempo real</div>
+      </div>
+      <div id="marketGainersList">
+        <div class="text-center py-8 text-gray-500">Carregando dados do mercado...</div>
+      </div>
+    </div>
+
+    <!-- Market Trends - Top Losers -->
+    <div class="bg-gray-900 rounded-2xl p-6 border border-gray-800">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold flex items-center gap-2">
+          <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>
+          </svg>
+          Top 10 Maiores Quedas do Mercado
+        </h2>
+        <div class="text-sm text-gray-400">Dados em tempo real</div>
+      </div>
+      <div id="marketLosersList">
+        <div class="text-center py-8 text-gray-500">Carregando dados do mercado...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  window.BRAPI_TOKEN ="n9UtnpcYpfTkmtxTxWSndg";
+</script>
+
+<script src="investimentos.js"></script>
+
+
+
+  <script src="investimentos.js"></script>
+</body>
+</html>

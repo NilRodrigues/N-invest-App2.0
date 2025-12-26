@@ -1,0 +1,187 @@
+/* investimentos.css */
+
+/* Reset básico */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* =========================
+   Theme tokens (CSS variables)
+   ========================= */
+:root {
+  color-scheme: dark;
+
+  --bg: #000;
+  --text: #fff;
+
+  --card: #111827;          /* ~ gray-900 */
+  --card-2: #1f2937;        /* ~ gray-800 */
+  --border: #1f2937;        /* ~ gray-800 */
+  --border-2: #374151;      /* ~ gray-700 */
+
+  --muted: #9ca3af;         /* ~ gray-400 */
+  --muted-2: #6b7280;       /* ~ gray-500 */
+
+  --primary: #a855f7;       /* purple-500 */
+  --primary-2: #ec4899;     /* pink-500 */
+
+  --shadow: 0 10px 25px rgba(0,0,0,.35);
+}
+
+/* Light theme */
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #f6f7fb;
+  --text: #0f172a;
+
+  --card: #ffffff;
+  --card-2: #ffffff;
+  --border: #e5e7eb;
+  --border-2: #e5e7eb;
+
+  --muted: #475569;
+  --muted-2: #64748b;
+
+  --shadow: 0 10px 25px rgba(2,6,23,.10);
+}
+
+/* Base */
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* =========================
+   Override utilitários Tailwind usados no HTML
+   (para permitir troca de tema sem refatorar tudo)
+   ========================= */
+.bg-black { background-color: var(--bg) !important; }
+.text-white { color: var(--text) !important; }
+
+.bg-gray-900 { background-color: var(--card) !important; }
+.bg-gray-800 { background-color: var(--card-2) !important; }
+
+.border-gray-800 { border-color: var(--border) !important; }
+.border-gray-700 { border-color: var(--border-2) !important; }
+
+.text-gray-400 { color: var(--muted) !important; }
+.text-gray-500 { color: var(--muted-2) !important; }
+
+.text-purple-500 { color: var(--primary) !important; }
+.bg-purple-500 { background-color: var(--primary) !important; }
+
+.from-purple-400 { --tw-gradient-from: #c084fc !important; }
+.to-pink-600 { --tw-gradient-to: #db2777 !important; }
+
+.from-purple-600 { --tw-gradient-from: #9333ea !important; }
+.to-pink-600 { --tw-gradient-to: #db2777 !important; }
+
+/* Em light, suaviza os "blobs" do fundo */
+html[data-theme="light"] .bg-purple-500 {
+  background-color: rgba(168, 85, 247, 0.22) !important;
+}
+
+/* =========================
+   Top controls (Menu + Theme)
+   ========================= */
+.top-controls {
+  position: fixed;
+  top: 14px;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.top-controls-inner {
+  max-width: 80rem; /* ~ max-w-7xl */
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.top-btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform .15s ease, opacity .15s ease, border-color .15s ease;
+}
+
+html[data-theme="light"] .top-btn {
+  background: rgba(255, 255, 255, 0.70);
+}
+
+.top-btn:hover { transform: translateY(-1px); }
+.top-btn:active { transform: translateY(0); opacity: .9; }
+
+.top-btn:focus-visible {
+  outline: 3px solid rgba(168, 85, 247, .45);
+  outline-offset: 3px;
+}
+
+.top-btn .icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 420px) {
+  .top-btn .label { display: none; }
+}
+
+.page-pad-top{
+  padding-top: 110px !important; /* espaço real para os botões fixos */
+}
+
+.top-controls{
+  top: 8px; /* antes estava 14px */
+}
+
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, opacity .15s ease;
+  width: 36px;
+  height: 36px;
+}
+
+.back-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.back-btn:focus-visible {
+  outline: 3px solid rgba(168, 85, 247, 0.45);
+  outline-offset: 3px;
+}
